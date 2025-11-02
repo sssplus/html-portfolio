@@ -1,9 +1,11 @@
-Hi_I_AM_A_<#STRUGGLING> {
+from Chatterjee import Hi_I_AM👋👋
+const Soumedhik=<#STRUGGLING> {
  FULL STACK DEVELOPER(C.SOUMEDHIK)
  };
 
 <div class="bg-developer engineer fancy:sploot love-books">
-<h2 unfinished 
+<h2 class independent> current: building fullScale website. <h2>
+<div>
 
 
 
