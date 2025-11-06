@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id="pageTitle">Soumedhik Chatterjee - Lead Full Stack Developer Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap CSS (required for the Carousel component) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Font Awesome for Icons (Social Media & Stars) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Font Imports: Using Poppins for a modern, professional look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base typography using Poppins */
+        body { font-family: "Poppins", sans-serif; }
+
+        /* Ensure max-width for desktop layout, keeping it centered */
+        .page-container {
+            max-width: 1600px;
+            margin: auto;
+        }
+
+        /* --- CAROUSEL STYLES --- */
+        .main-content .carousel {
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            padding: 5px;
+        }
+        /* Ensures the placeholder images in the carousel look centered and contained */
+        .carousel-item img {
+            max-height: 500px;
+            object-fit: cover; /* Changed to cover for a better look */
+            width: 100%;
+            border-radius: 1.25rem;
+            background-color: #333;
+        }
+
+        /* Project Card Hover Effect */
+        .project-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- STAR RATING CSS for interactivity --- */
+        .star-rating-icon {
+            color: #ff6e07; /* Orange color for filled stars */
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: color 0.1s;
+        }
+        .star-rating-icon.empty {
+            color: #cccccc; /* Light gray for empty stars */
+        }
+        .skill-rating-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #555;
+        }
+        .skill-rating-container:last-of-type {
+            border-bottom: none;
+        }
+        .skill-name {
+            font-weight: 600;
+            flex-grow: 1;
+            padding-right: 15px;
+        }
+        .star-icons {
+            min-width: 130px;
+            text-align: right;
+        }
+
+        /* Modal specific styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        .modal-content-container {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 20px;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover, .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Mobile adjustment for modal margin */
+        @media (max-width: 768px) {
+            .modal-content-container {
+                margin: 20px auto;
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 page-container">
+
+<!-- START: Sidebar and Overlay Structure -->
+
+<!-- Mobile Overlay (hidden by default) -->
+<div id="myOverlay" class="fixed inset-0 bg-black opacity-50 z-40 transition-opacity duration-300 hidden lg:hidden" onclick="w3_close()"></div>
+
+<!-- Sidebar/menu - Tailwind Implementation -->
+<nav id="mySidebar" class="fixed h-full w-80 bg-gray-900 text-white shadow-xl z-50 transition-transform duration-300 transform -translate-x-full lg:translate-x-0">
+    <div class="flex flex-col font-semibold h-full">
+        <!-- Enhanced Sidebar Header -->
+        <div class="bg-gray-800 p-8 text-center">
+            <img id="sidebar-profile-img" src="https://placehold.co/120x120/1f2937/FFFFFF?text=SC" alt="Profile Initial" class="mx-auto rounded-full mb-4 border-2 border-yellow-400">
+            <h3 class="text-xl "><b>SOUMEDHIK CHATTERJEE</b></h3>
+            <span class="text-sm font-normal text-yellow-400">LEAD FULL STACK DEVELOPER</span>
+        </div>
+
+        <!-- Close button (mobile only) -->
+        <a href="javascript:void(0)" onclick="w3_close()" class="p-4 block lg:hidden text-center border-b border-gray-700 hover:bg-gray-700 transition duration-150">CLOSE MENU</a>
+
+        <!-- Navigation Links -->
+        <div class="flex flex-col mt-4">
+            <a href="#portfolio" onclick="w3_close()" class="px-6 py-3 w-full text-left hover:bg-gray-700 hover:text-yellow-400 transition duration-150 flex items-center"><i class="fa fa-briefcase mr-3 text-lg"></i> FEATURED WORK</a>
+            <a href="#about" onclick="w3_close()" class="px-6 py-3 w-full text-left hover:bg-gray-700 hover:text-yellow-400 transition duration-150 flex items-center"><i class="fa fa-user mr-3 text-lg"></i> ABOUT ME</a>
+            <a href="#skills" onclick="w3_close()" class="px-6 py-3 w-full text-left hover:bg-gray-700 hover:text-yellow-400 transition duration-150 flex items-center"><i class="fa fa-code mr-3 text-lg"></i> SKILLS</a>
+            <a href="#contact" onclick="w3_close()" class="px-6 py-3 w-full text-left hover:bg-gray-700 hover:text-yellow-400 transition duration-150 flex items-center"><i class="fa fa-envelope mr-3 text-lg"></i> CONTACT</a>
+        </div>
+
+        <!-- Social Icons at the bottom of the sidebar -->
+        <div class="mt-auto p-4 text-center border-t border-gray-700">
+             <div class="flex justify-center space-x-4 text-xl">
+                 <!-- Updated social media links -->
+                 <a class="hover:text-yellow-400 transition duration-150" href="https://github.com/sssplus/html-portfolio" target="_blank" aria-label="GitHub"><i class="fa fa-github"></i></a>
+                 <a class="hover:text-yellow-400 transition duration-150" href="https://twitter.com/Soumedhik" target="_blank" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+                 <a class="hover:text-yellow-400 transition duration-150" href="https://linkedin.com/in/soumedhik" target="_blank" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                 <a class="hover:text-yellow-400 transition duration-150" href="mailto:export.ic.tech@gmail.com" target="_blank" aria-label="Email"><i class="fa fa-envelope"></i></a>
+             </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="fixed top-0 left-0 right-0 bg-white shadow p-4 lg:hidden z-30">
+    <div class="flex justify-between items-center text-xl">
+        <span class="p-2 font-bold hover:text-yellow-400">TECH&EXPORT</span>
+        <a href="javascript:void(0)" class="p-2" onclick="w3_open()" aria-label="Open Menu">&#9776;</a>
+    </div>
+</header>
+
+<!-- !PAGE CONTENT! -->
+<!-- Main content container shifted left on desktop using lg:ml-80 -->
+<div class="main-content lg:ml-80 min-h-screen">
+
+    <!-- Push down content on small screens (margin-top:83px equivalent) -->
+    <div class="lg:hidden h-20"></div>
+
+    <!-- Key Differentiator Banner -->
+    <div class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <p class="text-xl font-medium italic" id="bannerQuote">
+            "Building scalable, secure, and beautiful full-stack applications with a focus on user experience."
+        </p>
+    </div>
+
+    <!-- Portfolio Section Header -->
+    <div class="p-8" id="portfolio">
+        <h2 class="text-3xl font-extrabold text-gray-800 border-b-4 border-yellow-500 pb-4">FEATURED WORK</h2>
+        <p class="mt-3 text-gray-600">Click any card or slide to view the full project details, code, and live demo.</p>
+    </div>
+
+    <!-- START: Dynamic Projects Grid Container (Will be populated by JS) -->
+    <div class="px-8 grid grid-cols-1 md:grid-cols-2 gap-8 mb-12" id="projects-grid">
+        <!-- Project cards injected here -->
+    </div>
+    <!-- END: Featured Projects Grid Container -->
+
+    <!-- Additional Projects Section Title -->
+    <div class="px-8 mb-4">
+        <h3 class="text-2xl font-semibold text-gray-800 border-b-2 border-gray-300 pb-2">Additional Projects</h3>
+    </div>
+
+    <!-- START: Bootstrap Carousel Insertion Container (Will be populated by JS) -->
+    <div id="carouselDemo" class="carousel slide px-8 pb-12" data-bs-ride="carousel">
+        <div class="carousel-indicators" id="carousel-indicators">
+            <!-- Indicators injected here -->
+        </div>
+        <div class="carousel-inner rounded-xl overflow-hidden shadow-2xl" id="carousel-inner">
+            <!-- Carousel items injected here -->
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselDemo" data-bs-slide="prev" aria-label="Previous Project">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselDemo" data-bs-slide="next" aria-label="Next Project">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <!-- END: Bootstrap Carousel Insertion Container -->
+
+    <!-- About section -->
+    <div class="bg-gray-800 text-center text-gray-200 py-16 px-8 mt-12" id="about">
+        <h4 id="skills" class="text-3xl font-extrabold border-b-4 border-yellow-500 pb-2 inline-block">ABOUT ME & SKILLS</h4>
+        <img id="about-profile-img" src="https://placehold.co/300x350/808080/FFFFFF?text=Soumedhik+Chatterjee" alt="Soumedhik Chatterjee Profile Picture" class="mx-auto my-8 rounded-full shadow-xl border-4 border-blue-500" width="300" height="350">
+        <div class="max-w-xl mx-auto text-left">
+            <h4 class="text-2xl font-semibold text-yellow-400">Soumedhik Chatterjee - Lead Full Stack Developer</h4>
+            <p id="about-text" class="mt-4 leading-relaxed text-gray-300">
+                I am a passionate **Full Stack Developer** creating highly performant and scalable web applications. My specialty lies in bridging the gap between elegant **UI/UX design** and robust, cloud-native back-end architecture. 
+            <p class="mt-2 text-gray-300">Email: <b id="contact-email">export.ic.tech@gmail.com</b></p>
+            <p class="text-gray-300">Location: <b id="contact-location">San Francisco, CA</b></p>
+            <hr class="border-gray-500 my-6">
+
+            <h4 class="text-xl font-semibold mb-4 text-yellow-400">Client Skill Rating (Your Feedback is Saved)</h4>
+
+            <!-- START: Responsive Client Rating System (Firebase-connected) -->
+            <div class="text-sm">
+
+                <!-- Skill 1: UI/UX Design -->
+                <div class="skill-rating-container">
+                    <span class="skill-name text-gray-200">UI/UX Design & Prototyping</span>
+                    <div class="star-icons" data-skill-id="uiux" data-rating="0" aria-label="Rating for UI/UX Design">
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="1"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="2"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="3"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="4"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="5"></i>
+                    </div>
+                </div>
+
+                <!-- Skill 2: Front-End Development (React) -->
+                <div class="skill-rating-container">
+                    <span class="skill-name text-gray-200">Front-End Development (React/Angular)</span>
+                    <div class="star-icons" data-skill-id="frontend" data-rating="0" aria-label="Rating for Front-End Development">
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="1"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="2"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="3"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="4"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="5"></i>
+                    </div>
+                </div>
+
+                <!-- Skill 3: Cloud Architecture (AWS/GCP) -->
+                <div class="skill-rating-container">
+                    <span class="skill-name text-gray-200">Cloud Architecture (AWS/GCP)</span>
+                    <div class="star-icons" data-skill-id="cloud" data-rating="0" aria-label="Rating for Cloud Architecture">
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="1"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="2"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="3"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="4"></i>
+                        <i class="fa fa-star-o star-rating-icon empty" data-value="5"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- END: Responsive Client Rating System -->
+
+            <p><button class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-lg mt-8 mb-4 transition duration-150 shadow-xl">DOWNLOAD FULL RESUME (PDF)</button></p>
+            <hr class="border-gray-500 my-6">
+        </div>
+    </div>
+
+    <!-- Contact section -->
+    <div class="bg-gray-100 py-16 px-8" id="contact">
+        <div class="max-w-xl mx-auto">
+            <h4 class="text-3xl font-extrabold text-gray-800 text-center border-b-4 border-yellow-500 pb-2 inline-block mb-8">CONTACT ME</h4>
+            <p class="mb-6 text-center text-gray-600">Send me a message below!</p>
+            <form action="/action_page.php" target="_blank" class="space-y-4 bg-white p-8 rounded-xl shadow-2xl">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700" for="name">Name</label>
+                    <input class="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500" type="text" id="name" name="Name" placeholder="Your Name" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700" for="email">Email</label>
+                    <input class="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500" type="email" id="email" name="Email" placeholder="you@example.com" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700" for="message">Message</label>
+                    <textarea class="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500" id="message" name="Message" rows="5" placeholder="Let's discuss your project..." required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-lg hover:bg-gray-700 transition duration-200 text-lg font-semibold shadow-md">
+                    <i class="fa fa-paper-plane mr-2"></i> Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-10 px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-yellow-500">Connect</h3>
+                <p class="text-gray-400">Follow my work and connect professionally.</p>
+                <div class="flex space-x-4 text-2xl">
+                    <a class="hover:text-yellow-500 transition duration-150" href="https://github.com/sssplus/html-portfolio" target="_blank" aria-label="GitHub"><i class="fa fa-github"></i></a>
+                    <a class="hover:text-yellow-500 transition duration-150" href="https://twitter.com/Soumedhik" target="_blank" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+                    <a class="hover:text-yellow-500 transition duration-150" href="https://linkedin.com/in/soumedhik" target="_blank" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-yellow-500">Latest Insight</h3>
+                <ul class="divide-y divide-gray-700">
+                    <li class="py-2 hover:bg-gray-800 px-2 -mx-2 rounded transition duration-150">
+                        <span class="text-lg font-semibold text-gray-300">Design Trend</span><br>
+                        <span class="text-sm text-gray-400">Why Flat Design is Back</span>
+                    </li>
+                    <li class="py-2 hover:bg-gray-800 px-2 -mx-2 rounded transition duration-150">
+                        <span class="text-lg font-semibold text-gray-300">Coding Tip</span><br>
+                        <span class="text-sm text-gray-400">Async/Await Best Practices</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-yellow-500">Expertise Tags</h3>
+                <p class="flex flex-wrap gap-2" id="footer-tags">
+                    <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">UI/UX</span>
+                    <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">React</span>
+                    <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">Node.js</span>
+                    <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">Figma</span>
+                    <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">Cloud Native</span>
+                    <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">Python</span>
+                    <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">APIs</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="bg-gray-950 text-center text-gray-500 py-3">
+        <p class="text-sm">Built with passion and pure code. © 2025 Soumedhik Chatterjee.</p>
+    </div>
+
+<!-- End page content -->
+</div>
+
+<!-- START: Project Detail Modal (Hidden by default) -->
+<div id="projectModal" class="modal">
+    <div class="modal-content-container relative">
+        <span class="close-button absolute top-4 right-6" onclick="closeModal()">&times;</span>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4 pt-8">
+            <!-- Left Column: Image and Links -->
+            <div class="lg:col-span-1">
+                <img id="modal-image" class="w-full h-auto rounded-lg shadow-xl mb-6" src="https://placehold.co/600x400" alt="Project Image">
+                
+                <h4 class="text-xl font-bold text-gray-800 mb-3 border-b-2 pb-2">Actions</h4>
+
+                <a id="modal-demo-link" href="#" target="_blank" class="flex items-center justify-center bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-150 mb-3 shadow-md" style="display: none;">
+                    <i class="fa fa-external-link mr-2"></i> View Live Demo
+                </a>
+                <a id="modal-repo-link" href="#" target="_blank" class="flex items-center justify-center bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-800 transition duration-150 shadow-md" style="display: none;">
+                    <i class="fa fa-github mr-2"></i> View Code/Repo
+                </a>
+                
+                <p id="modal-links-warning" class="text-sm text-red-500 mt-4 text-center" style="display: none;">
+                    *No demo or repo link provided for this project.*
+                </p>
+
+            </div>
+
+            <!-- Right Column: Details -->
+            <div class="lg:col-span-2">
+                <h2 id="modal-title" class="text-4xl font-extrabold text-gray-900 mb-3">Project Title</h2>
+                <p class="text-sm text-gray-500 mb-4">Project ID: <b id="modal-id"></b></p>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 border-b pb-2 mb-3">Description</h3>
+                <p id="modal-long-description" class="text-gray-700 leading-relaxed mb-6">Full description goes here...</p>
+
+                <h3 class="text-2xl font-semibold text-gray-800 border-b pb-2 mb-3">Key Technologies</h3>
+                <div id="modal-tech-tags" class="flex flex-wrap gap-2">
+                    <!-- Tags injected here -->
+                </div>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 border-b pb-2 mt-6 mb-3">Role & Impact</h3>
+                <p id="modal-role-impact" class="text-gray-700 leading-relaxed">My role was...</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Project Detail Modal -->
+
+<script type="module">
+    // --- FIREBASE AND STAR RATING LOGIC (Persistence across sessions) ---
+
+    // Firebase Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, collection, query, getDocs, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    let app, db, auth;
+    let userId = null;
+    let appId = 'default-app-id'; // Default, will be overwritten by global
+
+    // Utility function for exponential backoff (retry on failure)
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function initializeFirebase() {
+        appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+
+        if (!firebaseConfig) {
+            console.warn("Firebase configuration not found. Star ratings will not be saved permanently.");
+            setupStarListeners(appId); // Setup non-persistent listeners
+            // Continue to load project content
+            loadProjectContent();
+            return;
+        }
+
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            setLogLevel('Debug');
+
+            // Handle user authentication (Custom Token or Anonymous fallback)
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                } else {
+                    const initialToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                    try {
+                        if (initialToken) {
+                            await signInWithCustomToken(auth, initialToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                        userId = auth.currentUser.uid;
+                    } catch (error) {
+                        console.error("Authentication failed, falling back to anonymous sign-in failed:", error);
+                        // If all else fails, use a random ID, though it won't persist across true sessions.
+                        userId = crypto.randomUUID();
+                    }
+                }
+                console.log(`Firebase Ready. User ID: ${userId} for App ID: ${appId}`);
+                loadAllRatings(appId);
+                setupStarListeners(appId);
+                loadProjectContent(); // Load content after auth is stable
+            });
+        } catch (e) {
+            console.error("Failed to initialize Firebase services:", e);
+            setupStarListeners(appId);
+            loadProjectContent();
+        }
+    }
+
+    // Function to save the skill rating to Firestore
+    async function saveRating(skillId, rating, appId, retries = 3) {
+        if (!db || !userId) return; // Cannot save if not connected/authenticated
+
+        const ratingDocRef = doc(db, `artifacts/${appId}/users/${userId}/ratings`, skillId);
+        const data = {
+            rating: rating,
+            timestamp: serverTimestamp()
+        };
+
+        for (let i = 0; i < retries; i++) {
+            try {
+                await setDoc(ratingDocRef, data, { merge: true });
+                console.log(`Rating for ${skillId} saved successfully: ${rating}`);
+                return;
+            } catch (e) {
+                if (i < retries - 1) {
+                    await delay(Math.pow(2, i) * 1000); // Exponential backoff: 1s, 2s, 4s...
+                } else {
+                    console.error("Error saving rating after all retries: ", e);
+                }
+            }
+        }
+    }
+
+    // Function to load all user ratings from Firestore
+    async function loadAllRatings(appId) {
+        if (!db || !userId) return;
+
+        try {
+            const ratingsColRef = collection(db, `artifacts/${appId}/users/${userId}/ratings`);
+            const q = query(ratingsColRef);
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach((doc) => {
+                const skillId = doc.id;
+                const data = doc.data();
+                const rating = data.rating;
+
+                const container = document.querySelector(`.star-icons[data-skill-id="${skillId}"]`);
+                if (container && rating !== undefined) {
+                    container.setAttribute('data-rating', rating);
+                    updateStars(container, rating);
+                }
+            });
+        } catch (e) {
+            console.error("Error loading ratings: ", e);
+        }
+    }
+
+    // UI function to update the star icons visually (fill/unfill)
+    function updateStars(container, value) {
+        const stars = container.querySelectorAll('.star-rating-icon');
+
+        stars.forEach(star => {
+            const starValue = parseInt(star.getAttribute('data-value'));
+
+            if (starValue <= value) {
+                star.classList.remove('fa-star-o', 'empty');
+                star.classList.add('fa-star');
+            } else {
+                star.classList.add('fa-star-o', 'empty');
+                star.classList.remove('fa-star');
+            }
+        });
+    }
+
+    // Event handler for star click: updates UI and saves to Firebase
+    function handleStarClick(event, appId) {
+        const star = event.currentTarget;
+        const container = star.parentElement;
+        const value = parseInt(star.getAttribute('data-value'));
+
+        container.setAttribute('data-rating', value);
+        updateStars(container, value);
+
+        const skillId = container.getAttribute('data-skill-id');
+        saveRating(skillId, value, appId);
+    }
+
+    // Event handler for mouse hover: shows pending rating visually
+    function handleStarHoverIn(event) {
+        const star = event.currentTarget;
+        const container = star.parentElement;
+        const hoverValue = parseInt(star.getAttribute('data-value'));
+
+        updateStars(container, hoverValue);
+    }
+
+    // Event handler for mouse out: reverts stars to saved rating
+    function handleStarHoverOut(event) {
+        const container = event.currentTarget;
+        const savedRating = parseInt(container.getAttribute('data-rating') || 0);
+
+        updateStars(container, savedRating);
+    }
+
+    // Attaches all event listeners to the star containers
+    function setupStarListeners(currentAppId) {
+        const ratingContainers = document.querySelectorAll('.star-icons');
+        ratingContainers.forEach(container => {
+            // Remove previous listeners if any (important for hot reload environments)
+            container.removeEventListener('mouseout', handleStarHoverOut);
+            const stars = container.querySelectorAll('.star-rating-icon');
+
+            stars.forEach(star => {
+                // Remove existing listeners before adding new ones
+                star.removeEventListener('click', handleStarClick);
+                star.removeEventListener('mouseover', handleStarHoverIn);
+
+                // Add new listeners
+                star.addEventListener('click', (e) => handleStarClick(e, currentAppId));
+                star.addEventListener('mouseover', handleStarHoverIn);
+            });
+            container.addEventListener('mouseout', handleStarHoverOut);
+
+            // Set initial state based on data-rating (or default 0) if not loaded from Firebase yet
+            handleStarHoverOut({currentTarget: container});
+        });
+    }
+
+    // Start Firebase initialization when the document is fully loaded
+    document.addEventListener('DOMContentLoaded', initializeFirebase);
+</script>
+
+<script>
+    // --- SIDEBAR LOGIC ---
+    const sidebar = document.getElementById("mySidebar");
+    const overlay = document.getElementById("myOverlay");
+
+    function w3_open() {
+        sidebar.classList.remove('-translate-x-full');
+        sidebar.classList.add('translate-x-0');
+        overlay.classList.remove('hidden');
+    }
+
+    function w3_close() {
+        sidebar.classList.remove('translate-x-0');
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+    }
+
+    // --- PROJECT DATA AND MODAL LOGIC ---
+
+    // Define all project data here.
+    const projectData = [
+        {
+            id: 'atlas',
+            featured: true, // Appears in the grid
+            title: "Project Atlas: Global Data Platform",
+            shortDescription: "A complete data visualization platform built with React, D3.js, and Node.js. Focus on performance and real-time updates.",
+            longDescription: "Project Atlas is a high-availability, real-time data dashboard used by major financial institutions. It processes millions of data points per second. My role involved optimizing the React front-end for near-instant rendering and building a scalable, serverless Node.js API gateway on AWS Lambda.",
+            technologies: ["React", "D3.js", "Node.js", "AWS Lambda", "PostgreSQL"],
+            imageUrl: "https://placehold.co/600x400/3498db/FFFFFF?text=Project+Atlas+Mockup",
+            demoUrl: "https://demo.projectatlas.com", // Replace with your live demo URL
+            repoUrl: "https://github.com/sssplus/html-portfolio", // Updated Repo URL
+            roleAndImpact: "Led a team of three developers. Improved data load times by 60% and achieved 99.9% uptime."
+        },
+        {
+            id: 'habitat',
+            featured: true, // Appears in the grid
+            title: "Habitat Mobile: UI/UX Redesign",
+            shortDescription: "Led the complete redesign for a major non-profit's mobile donation app, resulting in a 30% increase in monthly donations.",
+            longDescription: "The Habitat Mobile project involved extensive user research, A/B testing, and a full UI/UX overhaul using Figma and React Native. The primary goal was to simplify the donation flow. The successful deployment resulted in a significant increase in user engagement and funding.",
+            technologies: ["Figma", "UX Research", "React Native", "Firebase", "Stripe API"],
+            imageUrl: "https://placehold.co/600x400/2ecc71/FFFFFF?text=Mobile+App+Design",
+            demoUrl: "https://demo.habitatmobile.org", // Replace with your live demo URL
+            repoUrl: "", // No public repo for this
+            roleAndImpact: "Sole designer and front-end architect. The improved design lifted conversion rates by 30%."
+        },
+        {
+            id: 'ecommerce',
+            featured: false, // Appears in the carousel
+            title: "E-commerce Platform Redesign",
+            shortDescription: "Optimized checkout flow and integrated a new microservices backend (Spring Boot).",
+            longDescription: "This involved migrating a legacy monolithic e-commerce system to a modern microservices architecture using Spring Boot for the backend and Vue.js for the frontend. Focused heavily on security compliance and performance under load.",
+            technologies: ["Vue.js", "Spring Boot", "Microservices", "Docker", "Kubernetes"],
+            imageUrl: "https://placehold.co/1200x500/0d6efd/white?text=E-commerce+Platform+Redesign",
+            demoUrl: "https://staging.ecommerceplatform.com",
+            repoUrl: "",
+            roleAndImpact: "Backend lead developer. Designed and implemented 5 core microservices."
+        },
+        {
+            id: 'dashboard',
+            featured: false, // Appears in the carousel
+            title: "Internal Analytics Dashboard",
+            shortDescription: "Created a secure Angular dashboard to track key business metrics in real-time.",
+            longDescription: "A secure internal tool for senior management to visualize key performance indicators (KPIs) extracted from various databases. Built with Angular 14 and secured using OAuth 2.0.",
+            technologies: ["Angular", "TypeScript", "D3.js", "Chart.js", "OAuth 2.0"],
+            imageUrl: "https://placehold.co/1200x500/6c757d/white?text=Internal+Analytics+Dashboard",
+            demoUrl: "",
+            repoUrl: "https://github.com/sssplus/html-portfolio", // Updated Repo URL
+            roleAndImpact: "Full-stack developer responsible for the entire application lifecycle, from wireframe to deployment."
+        }
+    ];
+
+    const projectMap = new Map(projectData.map(p => [p.id, p]));
+
+    // Generates the Tech Tags HTML
+    function createTechTags(technologies) {
+        return technologies.map(tech => {
+            // Simple color logic based on first letter for variety
+            let color;
+            if (tech.startsWith('R') || tech.startsWith('N')) color = 'blue';
+            else if (tech.startsWith('F') || tech.startsWith('U')) color = 'purple';
+            else if (tech.startsWith('V') || tech.startsWith('A')) color = 'green';
+            else color = 'yellow';
+
+            return `<span class="bg-${color}-100 text-${color}-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">${tech}</span>`;
+        }).join('');
+    }
+
+    // Function to inject all project data into the HTML structure
+    function loadProjectContent() {
+        const gridContainer = document.getElementById('projects-grid');
+        const carouselInner = document.getElementById('carousel-inner');
+        const carouselIndicators = document.getElementById('carousel-indicators');
+
+        let gridHtml = '';
+        let carouselHtml = '';
+        let indicatorHtml = '';
+        let carouselIndex = 0;
+
+        projectData.forEach( (project, index) => {
+            const techTags = createTechTags(project.technologies);
+
+            // 1. Generate Grid Projects (Featured)
+            if (project.featured) {
+                gridHtml += `
+                    <div class="project-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200"
+                        onclick="openModal('${project.id}')">
+                        <img src="${project.imageUrl}" class="w-full h-48 object-cover" alt="${project.title}">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 text-gray-900">${project.title}</h3>
+                            <p class="text-gray-600 text-sm mb-4">${project.shortDescription}</p>
+                            <div class="flex flex-wrap gap-2">${techTags}</div>
+                        </div>
+                    </div>
+                `;
+            } 
+            
+            // 2. Generate Carousel Projects (Additional)
+            if (!project.featured) {
+                const isActive = carouselIndex === 0 ? 'active' : '';
+                
+                // Carousel Item
+                carouselHtml += `
+                    <div class="carousel-item ${isActive}" data-bs-interval="8000" onclick="openModal('${project.id}')">
+                        <img src="${project.imageUrl}" class="d-block w-full" alt="${project.title}">
+                        <div class="carousel-caption d-none d-md-block bg-black/60 p-3 rounded-lg">
+                            <h5>${project.title}</h5>
+                            <p>${project.shortDescription}</p>
+                        </div>
+                    </div>
+                `;
+
+                // Carousel Indicator
+                indicatorHtml += `
+                    <button type="button" data-bs-target="#carouselDemo" data-bs-slide-to="${carouselIndex}" 
+                            class="${isActive} bg-gray-700" aria-current="${isActive}" aria-label="${project.title}"></button>
+                `;
+                carouselIndex++;
+            }
+        });
+
+        gridContainer.innerHTML = gridHtml;
+        carouselInner.innerHTML = carouselHtml;
+        carouselIndicators.innerHTML = indicatorHtml;
+
+        // Update static content (can be customized here if needed)
+        updateStaticContent(); 
+    }
+
+    // Function to open and populate the Modal
+    function openModal(projectId) {
+        const project = projectMap.get(projectId);
+        if (!project) return;
+
+        // Get elements
+        const modal = document.getElementById('projectModal');
+        document.getElementById('modal-id').textContent = projectId;
+        document.getElementById('modal-title').textContent = project.title;
+        document.getElementById('modal-image').src = project.imageUrl;
+        document.getElementById('modal-long-description').textContent = project.longDescription;
+        document.getElementById('modal-role-impact').textContent = project.roleAndImpact;
+        
+        // Links Section
+        const demoLink = document.getElementById('modal-demo-link');
+        const repoLink = document.getElementById('modal-repo-link');
+        const linksWarning = document.getElementById('modal-links-warning');
+        
+        // Reset visibility
+        demoLink.style.display = 'none';
+        repoLink.style.display = 'none';
+        linksWarning.style.display = 'none';
+
+        // Set links and show/hide buttons
+        if (project.demoUrl) {
+            demoLink.href = project.demoUrl;
+            demoLink.style.display = 'flex';
+        }
+        if (project.repoUrl) {
+            repoLink.href = project.repoUrl;
+            repoLink.style.display = 'flex';
+        }
+        
+        if (!project.demoUrl && !project.repoUrl) {
+            linksWarning.style.display = 'block';
+        }
+
+        // Technologies Tags
+        document.getElementById('modal-tech-tags').innerHTML = createTechTags(project.technologies);
+
+        // Display modal
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling on main body
+    }
+
+    // Function to close the Modal
+    function closeModal() {
+        document.getElementById('projectModal').style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restore scrolling
+    }
+    
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        const modal = document.getElementById('projectModal');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+    // ----------------------------------------------------
+    // STATIC CONTENT UPDATES (FOR EASY EDITING)
+    // ----------------------------------------------------
+    function updateStaticContent() {
+        // 1. Profile and Contact
+        document.getElementById('pageTitle').textContent = "Soumedhik Chatterjee - My Awesome Portfolio";
+        document.getElementById('bannerQuote').textContent = "Building scalable, secure, and beautiful full-stack applications with a focus on user experience.";
+        document.getElementById('contact-email').textContent = "export.ic.tech@gmail.com"; 
+        document.getElementById('contact-location').textContent = "London, UK"; 
+        
+        // REPLACE THESE LINES with your uploaded image URLs
+        document.getElementById('about-profile-img').src = "https://placehold.co/300x350/1f2937/FFFFFF?text=PROFILE+PIC"; 
+        document.getElementById('sidebar-profile-img').src = "https://placehold.co/120x120/1f2937/FFFFFF?text=SC"; 
+        
+        document.getElementById('about-text').innerHTML = "I am an amazing developer specializing in cloud architecture and front-end performance. I have 10 years experience building robust, user-centric applications from scratch.";
+
+        // You can update the footer tags here if you want
+        document.getElementById('footer-tags').innerHTML = `
+            <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">React</span>
+            <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">Node.js</span>
+            <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">AWS</span>
+            <span class="bg-gray-700 text-yellow-300 text-xs font-medium px-3 py-1 rounded-full shadow">UX Design</span>
+        `;
+    }
+
+    // Make open/close modal functions globally accessible
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+</script>
+
+<!-- Bootstrap JS Bundle (must be placed at the end of the body for Carousel to work) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
